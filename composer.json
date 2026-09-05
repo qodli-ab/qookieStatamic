@@ -1,0 +1,28 @@
+{
+    "name": "qodli/qookie-statamic",
+    "description": "QookieQloud consent manager integration for Statamic.",
+    "type": "statamic-addon",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Qodli\\QookieStatamic\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Qodli\\QookieStatamic\\ServiceProvider"
+            ]
+        },
+        "statamic": {
+            "name": "QookieQloud Consent Management",
+            "description": "Loads the QookieQloud consent manager on Statamic sites."
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "statamic/cms": "^5.0|^6.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
