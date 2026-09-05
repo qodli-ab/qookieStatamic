@@ -78,4 +78,4 @@ QookieQloud Consent Management for Statamic is developed and maintained by Qodli
 
 ## Support
 
-For help with the addon, domain verification or your QookieQloud account, contact Qodli AB at hello@qodli.se.
+For help with the addon, domain verification or your QookieQloud account, contact QookieQloud at hello@qookieqloud.com or visit the helpcenter: https://qookieqloud.com/helpdesk/.
