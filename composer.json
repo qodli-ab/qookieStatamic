@@ -1,6 +1,13 @@
 {
     "name": "qodli/qookie-statamic",
     "description": "QookieQloud consent manager integration for Statamic.",
+    "authors": [
+        {
+            "name": "Qodli AB",
+            "email": "hello@qodli.se",
+            "homepage": "https://qodli.se"
+        }
+    ],
     "type": "statamic-addon",
     "license": "GPL-2.0-or-later",
     "autoload": {
