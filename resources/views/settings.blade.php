@@ -10,6 +10,8 @@
         $enabledLabel = $enabled ? 'Active' : 'Paused';
         $visitorMode = $loadForAuthenticated ? 'All visitors' : 'Public visitors';
         $sourceLabel = data_get($stats, 'source') === 'api' ? 'Live data' : 'Waiting for data';
+        $auditScore = data_get($stats, 'audit_score');
+        $auditScoreLabel = is_numeric($auditScore) ? ((int) $auditScore) . '/100' : 'N/A';
     @endphp
 
     <div class="qoq-dashboard">
@@ -36,22 +38,6 @@
 
         <section class="qoq-grid qoq-kpis" aria-label="QookieQloud overview">
             <article class="qoq-card qoq-kpi">
-                <span class="qoq-icon status" aria-hidden="true"></span>
-                <div>
-                    <p>Domain status</p>
-                    <strong class="{{ $statusClass }}">{{ $statusLabel }}</strong>
-                </div>
-            </article>
-
-            <article class="qoq-card qoq-kpi">
-                <span class="qoq-icon loader" aria-hidden="true"></span>
-                <div>
-                    <p>Loader</p>
-                    <strong>{{ $enabledLabel }}</strong>
-                </div>
-            </article>
-
-            <article class="qoq-card qoq-kpi">
                 <span class="qoq-icon consent" aria-hidden="true"></span>
                 <div>
                     <p>Consents today</p>
@@ -66,38 +52,25 @@
                     <strong>{{ number_format((int) data_get($stats, 'cookies', 0)) }}</strong>
                 </div>
             </article>
-        </section>
 
-        <section class="qoq-grid qoq-main" aria-label="QookieQloud details">
-            <article class="qoq-card qoq-panel">
-                <div class="qoq-card-header">
-                    <div>
-                        <p class="qoq-eyebrow">Verification</p>
-                        <h2>{{ $domain }}</h2>
-                    </div>
-                    <span class="qoq-pill {{ $statusClass }}">{{ $statusLabel }}</span>
-                </div>
-
-                <p class="qoq-muted">
-                    The addon checks whether this domain is registered in QookieQloud using the same signed API flow as the WordPress plugin.
-                </p>
-
-                <div class="qoq-detail-list">
-                    <div>
-                        <span>Last check</span>
-                        <strong>{{ data_get($domainStatus, 'checked_at') ? \Illuminate\Support\Carbon::parse(data_get($domainStatus, 'checked_at'))->timezone(config('app.timezone'))->format('Y-m-d H:i') : 'Not checked' }}</strong>
-                    </div>
-                    <div>
-                        <span>Frontend injection</span>
-                        <strong>{{ $enabled ? 'Injects automatically before the closing body tag' : 'Paused from plugin settings' }}</strong>
-                    </div>
-                    <div>
-                        <span>Visitor mode</span>
-                        <strong>{{ $visitorMode }}</strong>
-                    </div>
+            <article class="qoq-card qoq-kpi">
+                <span class="qoq-icon audit" aria-hidden="true"></span>
+                <div>
+                    <p>Audit score</p>
+                    <strong>{{ $auditScoreLabel }}</strong>
                 </div>
             </article>
 
+            <article class="qoq-card qoq-kpi">
+                <span class="qoq-icon status" aria-hidden="true"></span>
+                <div>
+                    <p>Verification status</p>
+                    <strong class="{{ $statusClass }}">{{ $statusLabel }}</strong>
+                </div>
+            </article>
+        </section>
+
+        <section class="qoq-grid qoq-main" aria-label="QookieQloud details">
             <article class="qoq-card qoq-panel">
                 <div class="qoq-card-header">
                     <div>
@@ -134,6 +107,35 @@
                     <div>
                         <span>Total consents</span>
                         <strong>{{ number_format((int) data_get($stats, 'consents_total', 0)) }}</strong>
+                    </div>
+                </div>
+            </article>
+
+            <article class="qoq-card qoq-panel">
+                <div class="qoq-card-header">
+                    <div>
+                        <p class="qoq-eyebrow">Verification</p>
+                        <h2>{{ $domain }}</h2>
+                    </div>
+                    <span class="qoq-pill {{ $statusClass }}">{{ $statusLabel }}</span>
+                </div>
+
+                <p class="qoq-muted">
+                    The addon checks whether this domain is registered in QookieQloud using the same signed API flow as the WordPress plugin.
+                </p>
+
+                <div class="qoq-detail-list">
+                    <div>
+                        <span>Last check</span>
+                        <strong>{{ data_get($domainStatus, 'checked_at') ? \Illuminate\Support\Carbon::parse(data_get($domainStatus, 'checked_at'))->timezone(config('app.timezone'))->format('Y-m-d H:i') : 'Not checked' }}</strong>
+                    </div>
+                    <div>
+                        <span>Frontend injection</span>
+                        <strong>{{ $enabled ? 'Injects automatically before the closing body tag' : 'Paused from plugin settings' }}</strong>
+                    </div>
+                    <div>
+                        <span>Visitor mode</span>
+                        <strong>{{ $visitorMode }}</strong>
                     </div>
                 </div>
             </article>
