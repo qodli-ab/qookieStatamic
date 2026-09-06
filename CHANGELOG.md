@@ -3,6 +3,12 @@
 All notable changes to QookieQloud Consent Management for Statamic will be documented in this file.
 
 
+## 1.0.3 - 2026-09-06
+
+### Changed
+
+- Re-arranged dashboard and added missing audit score.
+
 ## 1.0.2 - 2026-09-05
 
 ### Added
