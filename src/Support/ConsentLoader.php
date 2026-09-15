@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ConsentLoader
 {
-    private const LOADER_URL = 'https://js.qookieqloud.com/consentLoader.js';
+    private const LOADER_URL = 'https://cf-cdn.qookieqloud.com/consentLoader.js';
 
     public function __construct(private Settings $settings)
     {

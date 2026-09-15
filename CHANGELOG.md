@@ -2,6 +2,12 @@
 
 All notable changes to QookieQloud Consent Management for Statamic will be documented in this file.
 
+## 1.0.6 - 2026-09-15
+
+### Changed
+
+- Moved scripts to a new CDN
+
 ## 1.0.5 - 2026-09-11
 
 ### Added
