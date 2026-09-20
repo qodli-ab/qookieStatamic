@@ -1,81 +1,113 @@
 # QookieQloud Consent Management for Statamic
 
-QookieQloud Consent Management connects a Statamic site to QookieQloud and automatically loads the consent manager on public pages.
+Connect your Statamic website to QookieQloud, automatically load its cookie banner and view consent and cookie metrics in the Statamic control panel. Manage banner design, consent categories and domain settings in QookieQloud.
 
-QookieQloud helps site owners handle cookie consent, cookie categorisation, banner presentation and consent records from one central control panel. It combines automated cookie scanning, AI-assisted cookie classification, domain verification and privacy insights so teams can understand what their site loads, how cookies are categorised and where consent coverage can be improved.
+## Requirements
 
-When a Statamic site is connected to QookieQloud, the consent manager can be loaded automatically while the operational work stays in QookieQloud: banner design, consent categories, cookie scan results, Privacy Audit Score and domain-level settings. This addon keeps the Statamic side intentionally lightweight: install it, enable the loader, verify the domain and manage the consent experience in QookieQloud.
-
-## Features
-
-- Automatic consent manager injection on public Statamic pages.
-- No manual layout edits required after installation.
-- Domain verification from the Statamic control panel.
-- Dashboard overview with consent and cookie scan metrics.
-- Privacy Audit Score and domain insights from QookieQloud.
-- AI-assisted cookie classification in the QookieQloud platform.
-- Optional loading for authenticated visitors.
-- Manual Antlers tag available for custom implementations.
+- PHP 8.1 or later and Statamic 5 or 6, subject to your Statamic version's own PHP requirements.
+- A QookieQloud account with access to the domain you want to connect. Partners can select customer domains they are authorised to manage.
+- A Statamic super user to connect and manage the integration.
+- QookieQloud v2 access enabled for your account role during the rollout.
 
 ## Installation
 
-Add the addon as a path repository in your Statamic project's `composer.json`:
+Install the package from your configured Composer repository:
+
+```bash
+composer require qodli/qookie-statamic
+php please vendor:publish --tag=qookie-statamic
+```
+
+For local development before a package release is available, add a path repository pointing to your addon checkout, then require the development version:
 
 ```json
 {
     "repositories": [
         {
             "type": "path",
-            "url": "../qookie-Statamic"
+            "url": "../Plugins/Integrations/qookie-Statamic",
+            "options": { "symlink": true }
         }
-    ],
-    "require": {
-        "qodli/qookie-statamic": "*"
-    }
+    ]
 }
 ```
 
-Then run:
-
 ```bash
-composer update qodli/qookie-statamic
-php please vendor:publish --tag=qookie-statamic
+composer require qodli/qookie-statamic:@dev
 ```
 
-## Usage
+Adjust the path to your directory structure. A local path repository is a development setup, not a production installation source.
 
-Once installed, the addon injects the QookieQloud loader before the closing `</body>` tag on public HTML pages.
+## Connect your website
 
-No manual layout changes are required.
+1. Open **QookieQloud** in the Statamic control panel.
+2. Click **Connect to QookieQloud**. A new window opens at `https://app.qookieqloud.com`.
+3. Sign in, select a domain (or add one if it is missing), and approve the installation.
+4. Return to Statamic, check **Enable the banner**, and save your settings.
+5. Clear your site's full-page cache.
 
-If you want to place the loader manually instead, the addon also provides this Antlers tag:
+There are no API keys to copy and no required environment variables for a normal v2 connection. The callback URL is generated from the installation's route configuration, including a custom control-panel path or host. The browser returns to Statamic; QookieQloud does not need to make an inbound server request to your installation.
+
+The connection grants API access only. It does not allow the plugin to sign in to your QookieQloud account.
+
+## Dashboard and settings
+
+Once connected, the plugin shows consent totals, today's consent choices, detected cookies, scan information and the Privacy Audit Score. Statistics belong to the selected QookieQloud domain. If statistics cannot be loaded, the dashboard shows unavailable values rather than falling back to the old API.
+
+- **Enable the banner:** automatically inject the loader before the closing `</body>` tag on public HTML pages.
+- **Show the banner for logged-in users:** useful when previewing while editing your website. Disabled by default.
+- **Change connection:** confirm the action, then choose a domain in QookieQloud. The current local connection is kept until the new connection succeeds.
+- **Disconnect:** confirm to revoke this installation's private API access and remove its local connection. The domain remains in QookieQloud. Clear the site cache afterwards.
+
+Banner design and consent settings are managed in QookieQloud. The plugin includes its own logo, styles and English/Swedish interface translations.
+
+For custom templates, the addon also provides an Antlers tag:
 
 ```antlers
 {{ qookieqloud }}
 ```
 
-By default, the loader is only rendered for public visitors.
+## Local development and multiple installations
+
+You can connect `http://127.0.0.1:8027` and the live website to the same QookieQloud domain. Each connection receives its own private server key, while the domain's public Site Key and banner configuration are shared. An approved connection adds its origin to the public key's allowed origins. HTTP is supported for explicit localhost/127.0.0.1 development origins; other origins require HTTPS.
+
+Both installations report cookies and consents into the same domain, so local tests contribute to production statistics. Browser storage is separated by origin and uses the original Qookie storage names without added installation prefixes or suffixes. Earlier v2 storage names are migrated when accessed.
+
+“Latest contact” in QookieQloud records the last banner configuration request, not every page view or plugin dashboard request. Banner configuration can be cached in the browser for two hours. The v2 badge appears only when that latest configuration request used v2; a later v1 request replaces it.
+
+Disconnecting one installation does not revoke another installation's private key. Currently, disconnecting also leaves that origin on the shared public key's allowlist. A control panel hosted on a different origin from the public website does not automatically authorise the public website's origin.
 
 ## Configuration
 
-The addon works without manual setup. Site owners can manage the loader from the QookieQloud page in the Statamic control panel.
-
-These optional environment variables are only used as defaults before settings are saved in the control panel:
+Optional defaults, used until settings are saved in the control panel:
 
 ```env
 QOOKIEQLOUD_ENABLED=true
 QOOKIEQLOUD_LOAD_FOR_AUTHENTICATED=false
 ```
 
-The control panel page includes domain verification and dashboard metrics using the same signed API flow as the WordPress plugin.
+Advanced configuration (normally leave these unchanged):
 
-## Author
+```env
+QOOKIEQLOUD_V2_ENABLED=true
+QOOKIEQLOUD_APP_URL=https://app.qookieqloud.com
+QOOKIEQLOUD_V2_LOADER_URL=https://cf-cdn.qookieqloud.com/v2/consentLoader.js
+```
 
-QookieQloud Consent Management for Statamic is developed and maintained by Qodli AB.
+The private installation credentials are encrypted using the site's Laravel `APP_KEY` and stored in `storage/app/qookie-statamic/connection.enc`. Preserve that key and private storage across deployments. Do not publish the file or copy an existing installation's credentials into another environment; connect each installation separately.
 
-- Website: https://qodli.se
-- Email: hello@qodli.se
+The public Site Key is included in the banner script. The private server key is used only for server-to-server API requests.
+
+## Upgrading from the legacy integration
+
+V2 is enabled by default in this version and requires a connection. An unconnected v2 installation does not inject the banner and does not automatically fall back to v1.
+
+Plan the connection when upgrading an existing site. To retain the legacy behaviour temporarily, explicitly set `QOOKIEQLOUD_V2_ENABLED=false` and refresh Laravel's configuration cache if used. Remove that override when you are ready to connect via v2, then verify the banner and clear the site's page cache. Existing v1 backend endpoints remain available.
+
+For backend rollout requirements and implementation details, see [V2-PILOT.md](V2-PILOT.md).
 
 ## Support
 
-For help with the addon, domain verification or your QookieQloud account, contact QookieQloud at hello@qookieqloud.com or visit the helpcenter: https://qookieqloud.com/helpdesk/.
+Contact [hello@qookieqloud.com](mailto:hello@qookieqloud.com) or visit the [QookieQloud helpdesk](https://qookieqloud.com/helpdesk/).
+
+Developed and maintained by [Qodli AB](https://qodli.se).

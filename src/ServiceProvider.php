@@ -26,6 +26,7 @@ class ServiceProvider extends AddonServiceProvider
     public function bootAddon(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/qookie-statamic.php', 'qookie-statamic');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'qookie-statamic');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'qookie-statamic');
         $this->app['router']->pushMiddlewareToGroup('web', InjectQookieqloud::class);
 
@@ -41,10 +42,14 @@ class ServiceProvider extends AddonServiceProvider
                 ->icon($this->navIcon());
         });
 
-        Route::middleware(['statamic.cp', 'statamic.cp.authenticated'])
+        Route::middleware(['statamic.cp', 'statamic.cp.authenticated', \Qodli\QookieStatamic\Http\Middleware\PrivateConnection::class])
             ->prefix(config('statamic.cp.route', 'cp'))
             ->name('qookie-statamic.cp.')
             ->group(function (): void {
+                Route::post('/qookieqloud/connect', [\Qodli\QookieStatamic\Http\Controllers\ConnectController::class, 'start'])->name('connect');
+                Route::get('/qookieqloud/callback', [\Qodli\QookieStatamic\Http\Controllers\ConnectController::class, 'callback'])->name('callback');
+                Route::get('/qookieqloud/complete', [\Qodli\QookieStatamic\Http\Controllers\ConnectController::class, 'complete'])->name('complete');
+                Route::post('/qookieqloud/disconnect', [\Qodli\QookieStatamic\Http\Controllers\ConnectController::class, 'disconnect'])->name('disconnect');
                 Route::get('/qookieqloud', [SettingsController::class, 'show'])->name('settings');
                 Route::post('/qookieqloud', [SettingsController::class, 'update'])->name('update');
                 Route::post('/qookieqloud/verify', [SettingsController::class, 'verify'])->name('verify');

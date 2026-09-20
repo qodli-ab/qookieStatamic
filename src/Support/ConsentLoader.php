@@ -32,6 +32,13 @@ class ConsentLoader
 
     public function render(): string
     {
+        if (config('qookie-statamic.v2_enabled')) {
+            $connection = app(Connection::class)->publicData();
+            if (!$connection) return '';
+            $loaderUrl = e(config('qookie-statamic.v2_loader_url'));
+            $siteKey = e($connection['site_key']);
+            return '<script async src="'.$loaderUrl.'" data-site-key="'.$siteKey.'"></script>';
+        }
         $loaderUrl = e(self::LOADER_URL);
 
         return <<<HTML
