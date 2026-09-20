@@ -11,32 +11,41 @@ Connect your Statamic website to QookieQloud, automatically load its cookie bann
 
 ## Installation
 
-Install the package from your configured Composer repository:
+Add the addon repository to your Statamic project's `composer.json`:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:qodli-ab/qookieStatamic.git"
+        }
+    ],
+    "require": {
+        "qodli/qookie-statamic": "*"
+    }
+}
+```
+
+Then run:
 
 ```bash
-composer require qodli/qookie-statamic
+composer update qodli/qookie-statamic
 php please vendor:publish --tag=qookie-statamic
 ```
 
-For local development before a package release is available, add a path repository pointing to your addon checkout, then require the development version:
+For local development, use a path repository pointing to your addon checkout instead:
 
 ```json
 {
     "repositories": [
         {
             "type": "path",
-            "url": "../Plugins/Integrations/qookie-Statamic",
-            "options": { "symlink": true }
+            "url": "../qookie-Statamic"
         }
     ]
 }
 ```
-
-```bash
-composer require qodli/qookie-statamic:@dev
-```
-
-Adjust the path to your directory structure. A local path repository is a development setup, not a production installation source.
 
 ## Connect your website
 
@@ -104,7 +113,6 @@ V2 is enabled by default in this version and requires a connection. An unconnect
 
 Plan the connection when upgrading an existing site. To retain the legacy behaviour temporarily, explicitly set `QOOKIEQLOUD_V2_ENABLED=false` and refresh Laravel's configuration cache if used. Remove that override when you are ready to connect via v2, then verify the banner and clear the site's page cache. Existing v1 backend endpoints remain available.
 
-For backend rollout requirements and implementation details, see [V2-PILOT.md](V2-PILOT.md).
 
 ## Support
 

@@ -2,6 +2,16 @@
 
 All notable changes to QookieQloud Consent Management for Statamic will be documented in this file.
 
+## 2.0.1 - 2026-09-20
+### Changed
+
+- Updated README with clearer instructions for connecting to QookieQloud v2.
+
+## 2.0.0 - 2026-09-20
+### Added
+
+- Totally rewritten API connection to Backend API
+
 ## 1.0.6 - 2026-09-15
 
 ### Changed
