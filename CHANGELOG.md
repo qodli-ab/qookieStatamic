@@ -2,6 +2,11 @@
 
 All notable changes to QookieQloud Consent Management for Statamic will be documented in this file.
 
+## 2.0.3 - 2026-11-10
+### Fixed
+
+- Identify Statamic installations with `data-integration="statamic"` on both v1 and v2 consent loader scripts.
+
 ## 2.0.2 - 2026-11-10
 ### Fixed
 
