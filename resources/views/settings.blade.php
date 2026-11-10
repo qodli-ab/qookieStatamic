@@ -131,7 +131,7 @@
                     </div>
                     <div>
                         <span>Frontend injection</span>
-                        <strong>{{ $enabled ? 'Injects automatically before the closing body tag' : 'Paused from plugin settings' }}</strong>
+                        <strong>{{ $enabled ? 'Injects automatically before the closing head tag' : 'Paused from plugin settings' }}</strong>
                     </div>
                     <div>
                         <span>Visitor mode</span>

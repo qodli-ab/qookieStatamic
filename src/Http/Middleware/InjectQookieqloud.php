@@ -9,9 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InjectQookieqloud
 {
-    public function __construct(private ConsentLoader $loader)
-    {
-    }
+    public function __construct(private ConsentLoader $loader) {}
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -24,11 +22,11 @@ class InjectQookieqloud
         $content = $response->getContent();
         $script = $this->loader->render();
 
-        if (str_contains($content, $script) || ! str_contains(strtolower($content), '</body>')) {
+        if ($script === '' || str_contains($content, $script) || ! str_contains(strtolower($content), '</head>')) {
             return $response;
         }
 
-        $content = preg_replace('/<\/body>/i', $script . PHP_EOL . '</body>', $content, 1);
+        $content = preg_replace('/<\/head>/i', $script.PHP_EOL.'</head>', $content, 1);
         $response->setContent($content);
         $response->headers->remove('Content-Length');
 

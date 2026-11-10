@@ -11,41 +11,16 @@ Connect your Statamic website to QookieQloud, automatically load its cookie bann
 
 ## Installation
 
-Add the addon repository to your Statamic project's `composer.json`:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:qodli-ab/qookieStatamic.git"
-        }
-    ],
-    "require": {
-        "qodli/qookie-statamic": "*"
-    }
-}
-```
-
-Then run:
+Install the addon from Packagist in your Statamic project:
 
 ```bash
-composer update qodli/qookie-statamic
+composer require qodli/qookie-statamic
 php please vendor:publish --tag=qookie-statamic
 ```
 
-For local development, use a path repository pointing to your addon checkout instead:
+No custom Composer repository or GitHub SSH setup is required for a normal installation, including when running your website locally.
 
-```json
-{
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../qookie-Statamic"
-        }
-    ]
-}
-```
+Then follow [Connect your website](#connect-your-website) below.
 
 ## Connect your website
 
@@ -63,14 +38,14 @@ The connection grants API access only. It does not allow the plugin to sign in t
 
 Once connected, the plugin shows consent totals, today's consent choices, detected cookies, scan information and the Privacy Audit Score. Statistics belong to the selected QookieQloud domain. If statistics cannot be loaded, the dashboard shows unavailable values rather than falling back to the old API.
 
-- **Enable the banner:** automatically inject the loader before the closing `</body>` tag on public HTML pages.
+- **Enable the banner:** automatically inject the loader before the closing `</head>` tag on public HTML pages. The loader creates the banner container inside `<body>` once the DOM is ready. Pages without a closing `</head>` tag are left unchanged.
 - **Show the banner for logged-in users:** useful when previewing while editing your website. Disabled by default.
 - **Change connection:** confirm the action, then choose a domain in QookieQloud. The current local connection is kept until the new connection succeeds.
 - **Disconnect:** confirm to revoke this installation's private API access and remove its local connection. The domain remains in QookieQloud. Clear the site cache afterwards.
 
 Banner design and consent settings are managed in QookieQloud. The plugin includes its own logo, styles and English/Swedish interface translations.
 
-For custom templates, the addon also provides an Antlers tag:
+For custom placement, put the Antlers tag in your template before `</head>`. Keep the banner enabled; the middleware skips injection when the same loader script is already present:
 
 ```antlers
 {{ qookieqloud }}
@@ -113,6 +88,28 @@ V2 is enabled by default in this version and requires a connection. An unconnect
 
 Plan the connection when upgrading an existing site. To retain the legacy behaviour temporarily, explicitly set `QOOKIEQLOUD_V2_ENABLED=false` and refresh Laravel's configuration cache if used. Remove that override when you are ready to connect via v2, then verify the banner and clear the site's page cache. Existing v1 backend endpoints remain available.
 
+
+## Developing the addon locally
+
+If you are modifying the addon itself, use a path repository in your Statamic test project's `composer.json` pointing to your local addon checkout. This is not required for normal customer installations.
+
+```json
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../qookie-Statamic"
+        }
+    ]
+}
+```
+
+Adjust the path to match your checkout and preserve any existing project configuration. Then install the local development branch in the test project:
+
+```bash
+composer require qodli/qookie-statamic:dev-master
+php please vendor:publish --tag=qookie-statamic
+```
 
 ## Support
 
