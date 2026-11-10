@@ -93,14 +93,15 @@ class QookieV2ConnectionTest extends TestCase
         $html = app(ConsentLoader::class)->render();
         $this->assertStringContainsString('/v2/consentLoader.js', $html);
         $this->assertStringContainsString($this->credentials()['site_key'], $html);
+        $this->assertStringContainsString('data-integration="statamic"', $html);
         $this->assertStringNotContainsString('qq_sec_', $html);
         $this->assertArrayNotHasKey('server_secret', $connection->publicData());
     }
-    public function test_v2_without_connection_does_not_fall_back_but_v1_is_unchanged(): void
+    public function test_v2_without_connection_does_not_fall_back_and_v1_identifies_statamic(): void
     {
         $this->assertSame('', app(ConsentLoader::class)->render());
         config(['qookie-statamic.v2_enabled' => false]);
-        $this->assertSame('<script async src="https://cf-cdn.qookieqloud.com/consentLoader.js"></script>', app(ConsentLoader::class)->render());
+        $this->assertSame('<script async src="https://cf-cdn.qookieqloud.com/consentLoader.js" data-integration="statamic"></script>', app(ConsentLoader::class)->render());
     }
     public function test_pkce_exchange_is_outgoing_and_callback_leaves_code_url(): void
     {

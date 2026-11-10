@@ -37,12 +37,12 @@ class ConsentLoader
             if (!$connection) return '';
             $loaderUrl = e(config('qookie-statamic.v2_loader_url'));
             $siteKey = e($connection['site_key']);
-            return '<script async src="'.$loaderUrl.'" data-site-key="'.$siteKey.'"></script>';
+            return '<script async src="'.$loaderUrl.'" data-site-key="'.$siteKey.'" data-integration="statamic"></script>';
         }
         $loaderUrl = e(self::LOADER_URL);
 
         return <<<HTML
-<script async src="{$loaderUrl}"></script>
+<script async src="{$loaderUrl}" data-integration="statamic"></script>
 HTML;
     }
 
