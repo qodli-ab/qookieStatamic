@@ -2,6 +2,13 @@
 
 All notable changes to QookieQloud Consent Management for Statamic will be documented in this file.
 
+## 2.0.4 - 2026-11-21
+### Added
+
+- Show verified page counts, plan page limits and quota status from the v2 installation dashboard API.
+- Display verification, count attempt and notice dates, including active page-limit restrictions.
+- Add Swedish and English quota messages, with unavailable counts kept separate from cookie scan totals.
+
 ## 2.0.3 - 2026-11-10
 ### Fixed
 

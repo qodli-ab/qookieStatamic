@@ -117,6 +117,7 @@
                 <div><dt>{{ __('qookie-statamic::dashboard.last_scan') }}</dt><dd>{{ $stats['last_scan_at'] ?? '—' }}</dd></div>
             </dl>
         </section>
+        @include('qookie-statamic::partials.page-quota')
         <section class="qoq-live-card">
             <h2>{{ __('qookie-statamic::dashboard.connection') }}</h2>
             <p>{{ __('qookie-statamic::connection.connected', ['domain' => $connection['domain']]) }}</p>
