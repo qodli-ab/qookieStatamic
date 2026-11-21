@@ -2,6 +2,11 @@
 
 All notable changes to QookieQloud Consent Management for Statamic will be documented in this file.
 
+## 2.0.5 - 2026-11-21
+### Fixed
+
+- Include the page quota view in the release package to prevent an error when opening the dashboard.
+
 ## 2.0.4 - 2026-11-21
 ### Added
 
